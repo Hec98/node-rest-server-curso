@@ -1,0 +1,47 @@
+require('./config/config');
+const port = process.env.PORT;
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+ 
+// parse application/json
+app.use(bodyParser.json());
+
+
+
+app.get('/usuario', (req, res) => {
+  res.json('get World');
+});
+
+app.post('/usuario', (req, res) => {
+    let body = req.body;
+    if (body.nombre === undefined) {
+        res.status(400).json({
+            ok: false,
+            mensaje: 'El nombre es necesario'
+        });
+    } else {
+        res.json({
+            body    
+        });
+    }
+});
+
+app.put('/usuario/:id', (req, res) => {
+    let id = req.params.id;
+    res.json({
+        id
+    });
+});
+
+app.delete('/usuario', (req, res) => {
+    res.json('delete World');
+});
+
+const hora = new Date().getHours();
+const minutos = new Date().getMinutes();
+const segundos = new Date().getSeconds(); 
+app.listen(port, () => console.log(`Escuchando peticiones en el puerto ${port} ${hora}:${minutos}:${segundos}`));
