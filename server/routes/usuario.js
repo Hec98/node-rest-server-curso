@@ -21,10 +21,20 @@ app.get('/usuario', (req, res) => {
                     err
                 });
             }
-            res.json({
-                ok: true,
-                usuarios
-            });  
+
+            /* 
+            (node:23940) DeprecationWarning: collection.count is deprecated, and will be removed in a future version. 
+            Use Collection.countDocuments or Collection.estimatedDocumentCount instead
+            */
+
+            Usuario.countDocuments({}, (err, conteo) => {
+                res.json({
+                    ok: true,
+                    usuarios,
+                    cuantos: conteo
+                });
+            });
+  
         });
 });
 
