@@ -12,7 +12,7 @@ app.get('/usuario', (req, res) => {
     let limite = req.query.limite || 5;
     limite = Number(limite);
 
-    Usuario.find({}, 'nombre email role estado google img')    
+    Usuario.find({estado: true}, 'nombre email role estado google img')    
         .skip(desde)
         .limit(limite)
         .exec((err, usuarios) => {
@@ -28,7 +28,13 @@ app.get('/usuario', (req, res) => {
             Use Collection.countDocuments or Collection.estimatedDocumentCount instead
             */
 
-            Usuario.countDocuments({}, (err, conteo) => {
+            Usuario.countDocuments({estado: true}, (err, conteo) => {
+                if (err) {
+                    return res.status(400).json({
+                        ok: false,
+                        err
+                     });
+                }
                 res.json({
                     ok: true,
                     usuarios,
@@ -86,7 +92,22 @@ app.put('/usuario/:id', (req, res) => {
 
 app.delete('/usuario/:id', (req, res) => {
     let id = req.params.id;
-    Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
+    let cambiaEstado = {
+        estado: false
+    }
+    Usuario.findByIdAndUpdate(id, cambiaEstado, {new: true}, (err, usuarioBorrado) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                err
+            });
+        }
+        res.json({
+            ok: true,
+            usuario: usuarioBorrado
+        });
+    });
+    /* Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
@@ -106,7 +127,7 @@ app.delete('/usuario/:id', (req, res) => {
             usuario: usuarioBorrado
 
         });
-    });
+    }); */
 });
 
 module.exports = app;
