@@ -1,5 +1,6 @@
 require('./config/config');
 const port = process.env.PORT;
+const url = process.env.URLDB;
 const express = require('express');
 const mongoose = require('mongoose');
 const colors = require('colors/safe');
@@ -21,7 +22,7 @@ app.use(require('./routes/usuario'));
     console.log(colors.green('Base de datos ONLINE'));
 }); */
 
-mongoose.connect('mongodb://localhost:27017/cafe', {
+mongoose.connect(url, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
