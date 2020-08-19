@@ -18,4 +18,4 @@ else urlDB = process.env.MONGO_URI;
 process.env.URLDB = urlDB;
 
 // Google Client ID
-process.env.CLIENT_ID = process.env.CLIENT_ID || '771728662805-0q99qtlrd5d1b41ud1hdjgskugcv2cej.apps.googleusercontent.com';
+process.env.CLIENT_ID = process.env.CLIENT_ID || '771728662805-n7jeeeq93r3nd4kchhortkk8nnp81a9f.apps.googleusercontent.com';
