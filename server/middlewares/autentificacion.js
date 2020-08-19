@@ -20,7 +20,6 @@ let verificaToken = (req, res, next) => {
 // Verificar AdminRole
 let verificarAminRole = (req, res, next) => {
     let usuario = req.usuario;
-    console.log(usuario.role);
     if(usuario.role === 'ADMIN_ROLE') {
         next();
     } else {
