@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
 const Usuario = require('../models/usuario');
-const {verificaToken, verificarAminRole} = require('../middlewares/autentificacion');
+const { verificaToken, verificarAminRole } = require('../middlewares/autentificacion');
 const app = express();
 
 app.get('/usuario', verificaToken, (req, res) => {
@@ -11,7 +11,7 @@ app.get('/usuario', verificaToken, (req, res) => {
     let limite = req.query.limite || 5;
     limite = Number(limite);
 
-    Usuario.find({estado: true}, 'nombre email role estado google img')    
+    Usuario.find({ estado: true }, 'nombre email role estado google img')
         .skip(desde)
         .limit(limite)
         .exec((err, usuarios) => {
@@ -27,12 +27,12 @@ app.get('/usuario', verificaToken, (req, res) => {
             Use Collection.countDocuments or Collection.estimatedDocumentCount instead
             */
 
-            Usuario.countDocuments({estado: true}, (err, conteo) => {
+            Usuario.countDocuments({ estado: true }, (err, conteo) => {
                 if (err) {
                     return res.status(400).json({
                         ok: false,
                         err
-                     });
+                    });
                 }
                 res.json({
                     ok: true,
@@ -40,7 +40,7 @@ app.get('/usuario', verificaToken, (req, res) => {
                     cuantos: conteo
                 });
             });
-  
+
         });
 });
 
@@ -71,9 +71,9 @@ app.post('/usuario', [verificaToken, verificarAminRole], (req, res) => {
 
 app.put('/usuario/:id', [verificaToken, verificarAminRole], (req, res) => {
     let id = req.params.id;
-    let body = _.pick(req.body, ['nombre','email','img','role','estado']);
+    let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
 
-    Usuario.findByIdAndUpdate(id, body, {new: true, runValidators: true}, (err, usuarioDB) => {
+    Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, usuarioDB) => {
         if (err) {
             return res.status(400).json({
                 ok: false,
@@ -86,7 +86,7 @@ app.put('/usuario/:id', [verificaToken, verificarAminRole], (req, res) => {
         });
     });
 
-    
+
 });
 
 app.delete('/usuario/:id', [verificaToken, verificarAminRole], (req, res) => {
@@ -94,7 +94,7 @@ app.delete('/usuario/:id', [verificaToken, verificarAminRole], (req, res) => {
     let cambiaEstado = {
         estado: false
     }
-    Usuario.findByIdAndUpdate(id, cambiaEstado, {new: true}, (err, usuarioBorrado) => {
+    Usuario.findByIdAndUpdate(id, cambiaEstado, { new: true }, (err, usuarioBorrado) => {
         if (err) {
             return res.status(400).json({
                 ok: false,

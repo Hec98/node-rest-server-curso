@@ -12,7 +12,7 @@ const bodyParser = require('body-parser');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
- 
+
 // parse application/json
 app.use(bodyParser.json());
 
@@ -33,11 +33,11 @@ mongoose.connect(url, {
   useCreateIndex: true,
   useFindAndModify: false
 }, (err, res) => {
-    if (err) console.log(colors.red(err));
-    console.log(colors.green('Base de datos ONLINE'));
+  if (err) console.log(colors.red(err));
+  console.log(colors.green('Base de datos ONLINE'));
 });
 
 const hora = new Date().getHours();
 const minutos = new Date().getMinutes();
-const segundos = new Date().getSeconds(); 
+const segundos = new Date().getSeconds();
 app.listen(port, () => console.log(colors.cyan(`Escuchando peticiones en el puerto ${port} ${hora}:${minutos}:${segundos}`)));
