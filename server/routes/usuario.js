@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
 const Usuario = require('../models/usuario');
-const {verificaToken} = require('../middlewares/autentificacion');
+const {verificaToken, verificarAminRole} = require('../middlewares/autentificacion');
 const app = express();
 
 app.get('/usuario', verificaToken, (req, res) => {
@@ -44,7 +44,7 @@ app.get('/usuario', verificaToken, (req, res) => {
         });
 });
 
-app.post('/usuario', verificaToken, (req, res) => {
+app.post('/usuario', [verificaToken, verificarAminRole], (req, res) => {
     let body = req.body;
 
     let usuario = new Usuario({
@@ -69,7 +69,7 @@ app.post('/usuario', verificaToken, (req, res) => {
     });
 });
 
-app.put('/usuario/:id', verificaToken, (req, res) => {
+app.put('/usuario/:id', [verificaToken, verificarAminRole], (req, res) => {
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre','email','img','role','estado']);
 
@@ -89,7 +89,7 @@ app.put('/usuario/:id', verificaToken, (req, res) => {
     
 });
 
-app.delete('/usuario/:id', verificaToken, (req, res) => {
+app.delete('/usuario/:id', [verificaToken, verificarAminRole], (req, res) => {
     let id = req.params.id;
     let cambiaEstado = {
         estado: false
