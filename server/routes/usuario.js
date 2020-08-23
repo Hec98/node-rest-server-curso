@@ -15,32 +15,15 @@ app.get('/usuario', verificaToken, (req, res) => {
         .skip(desde)
         .limit(limite)
         .exec((err, usuarios) => {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }
-
+            if (err) return res.status(400).json({ ok: false, err }); 
             /* 
             (node:23940) DeprecationWarning: collection.count is deprecated, and will be removed in a future version. 
             Use Collection.countDocuments or Collection.estimatedDocumentCount instead
             */
-
             Usuario.countDocuments({ estado: true }, (err, conteo) => {
-                if (err) {
-                    return res.status(400).json({
-                        ok: false,
-                        err
-                    });
-                }
-                res.json({
-                    ok: true,
-                    usuarios,
-                    cuantos: conteo
-                });
+                if (err) return res.status(400).json({ ok: false, err });
+                res.json({ ok: true, usuarios, cuantos: conteo });
             });
-
         });
 });
 
@@ -55,17 +38,9 @@ app.post('/usuario', [verificaToken, verificarAminRole], (req, res) => {
     });
 
     usuario.save((err, usuarioDB) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
+        if (err) return res.status(400).json({ ok: false, err });
         // usuarioDB.password = null;
-        res.json({
-            ok: true,
-            usuario: usuarioDB
-        });
+        res.json({ ok: true, usuario: usuarioDB });
     });
 });
 
@@ -74,58 +49,22 @@ app.put('/usuario/:id', [verificaToken, verificarAminRole], (req, res) => {
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
 
     Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, usuarioDB) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-        res.json({
-            ok: true,
-            usuario: usuarioDB
-        });
+        if (err) return res.status(400).json({ ok: false, err });
+        res.json({ ok: true, usuario: usuarioDB });
     });
-
-
 });
 
 app.delete('/usuario/:id', [verificaToken, verificarAminRole], (req, res) => {
     let id = req.params.id;
-    let cambiaEstado = {
-        estado: false
-    }
+    let cambiaEstado = { estado: false }
     Usuario.findByIdAndUpdate(id, cambiaEstado, { new: true }, (err, usuarioBorrado) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-        res.json({
-            ok: true,
-            usuario: usuarioBorrado
-        });
+        if (err) return res.status(400).json({ ok: false, err });
+        res.json({ ok: true, usuario: usuarioBorrado });
     });
     /* Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            }); 
-        }  
-        if(!usuarioBorrado) {
-            return res.status(400).json({
-                ok: false,
-                err: {
-                    message: 'Usuario no encontrado'
-                }
-            });
-        }     
-        res.json({
-            ok: true,
-            usuario: usuarioBorrado
-
-        });
+        if (err) return res.status(400).json({ ok: false, err });
+        if(!usuarioBorrado) return res.status(400).json({ ok: false, err: { message: 'Usuario no encontrado' }});
+        res.json({ ok: true, usuario: usuarioBorrado });
     }); */
 });
 

@@ -34,7 +34,7 @@ mongoose.connect(url, {
   useFindAndModify: false
 }, (err, res) => {
   if (err) console.log(colors.red(err));
-  console.log(colors.green('Base de datos ONLINE'));
+  console.log(colors.green(`Base de datos ONLINE ${res.port}`));
 });
 
 const hora = new Date().getHours();
