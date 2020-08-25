@@ -23,7 +23,8 @@ app.get('/categoria/:id', verificaToken, (req, res) => {
     //Categoria.findByID();
     let id = req.params.id;
     Categoria.findById(id, (err, categoria) => {
-        if (err) return res.status(400).json({ ok: false, err });
+        if (err) return res.status(500).json({ ok: false, err });
+        if (!categoria) return res.status(400).json({ ok: false, err: { message: 'El id no existe'}});
         res.json({ ok: true, categoria });
     });
 });
@@ -64,8 +65,10 @@ app.delete('/categoria/:id', [verificaToken, verificarAminRole], (req, res) => {
     let id = req.params.id;
     Categoria.findByIdAndRemove(id, (err, categoriaRemovida) => {
         if (err) return res.status(400).json({ ok: false, err });
-        res.json({ ok: true, categoriaRemovida });
+        if (!categoria) return res.status(400).json({ ok: false, err: { message: 'El id no existe'}});
+        res.json({ ok: true, message:'Categoria borrada' });
     });
 });
+
 module.exports = app;
 
