@@ -9,6 +9,8 @@ const _ = require('underscore');
 // Mostrar todas las categorias
 app.get('/categoria', verificaToken, (req, res) => {
     Categoria.find({}, 'descripcion usuario')
+        .sort('descripcion')
+        .populate('usuario', 'nombre email')
         .exec((err, categoria) => {
             if (err) return res.status(400).json({ ok: false, err });
             Categoria.countDocuments({}, (err, conteo) => {
